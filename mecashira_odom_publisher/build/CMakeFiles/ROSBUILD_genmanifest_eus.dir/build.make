@@ -32,23 +32,23 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher
+CMAKE_SOURCE_DIR = /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher/build
+CMAKE_BINARY_DIR = /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher/build
 
 # Utility rule file for ROSBUILD_genmanifest_eus.
 
-CMakeFiles/ROSBUILD_genmanifest_eus: /home/javatea/.ros/roseus/mecashira_kinematic_publisher/manifest.l
+CMakeFiles/ROSBUILD_genmanifest_eus: /home/javatea/.ros/roseus/mecashira_odom_publisher/manifest.l
 CMakeFiles/ROSBUILD_genmanifest_eus: /home/javatea/prog/rtm-ros-robotics/jsk-ros-pkg/roseus/scripts/genmanifest_eus
 
-/home/javatea/.ros/roseus/mecashira_kinematic_publisher/manifest.l: ../manifest.xml
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher/build/CMakeFiles $(CMAKE_PROGRESS_1)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating /home/javatea/.ros/roseus/mecashira_kinematic_publisher/manifest.l"
-	/home/javatea/prog/rtm-ros-robotics/jsk-ros-pkg/roseus/scripts/genmanifest_eus mecashira_kinematic_publisher
+/home/javatea/.ros/roseus/mecashira_odom_publisher/manifest.l: ../manifest.xml
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating /home/javatea/.ros/roseus/mecashira_odom_publisher/manifest.l"
+	/home/javatea/prog/rtm-ros-robotics/jsk-ros-pkg/roseus/scripts/genmanifest_eus mecashira_odom_publisher
 
 ROSBUILD_genmanifest_eus: CMakeFiles/ROSBUILD_genmanifest_eus
-ROSBUILD_genmanifest_eus: /home/javatea/.ros/roseus/mecashira_kinematic_publisher/manifest.l
+ROSBUILD_genmanifest_eus: /home/javatea/.ros/roseus/mecashira_odom_publisher/manifest.l
 ROSBUILD_genmanifest_eus: CMakeFiles/ROSBUILD_genmanifest_eus.dir/build.make
 .PHONY : ROSBUILD_genmanifest_eus
 
@@ -61,6 +61,6 @@ CMakeFiles/ROSBUILD_genmanifest_eus.dir/clean:
 .PHONY : CMakeFiles/ROSBUILD_genmanifest_eus.dir/clean
 
 CMakeFiles/ROSBUILD_genmanifest_eus.dir/depend:
-	cd /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher/build /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher/build /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher/build/CMakeFiles/ROSBUILD_genmanifest_eus.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher/build /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher/build /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher/build/CMakeFiles/ROSBUILD_genmanifest_eus.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/ROSBUILD_genmanifest_eus.dir/depend
 

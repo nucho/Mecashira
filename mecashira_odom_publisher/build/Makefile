@@ -36,10 +36,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher
+CMAKE_SOURCE_DIR = /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher/build
+CMAKE_BINARY_DIR = /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -66,9 +66,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher/build/CMakeFiles /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher/build/CMakeFiles /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -200,17 +200,17 @@ clean-test-results/fast:
 .PHONY : clean-test-results/fast
 
 #=============================================================================
-# Target rules for targets named mecashira_kinematic_publisher
+# Target rules for targets named mecashira_odom_publisher
 
 # Build rule for target.
-mecashira_kinematic_publisher: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 mecashira_kinematic_publisher
-.PHONY : mecashira_kinematic_publisher
+mecashira_odom_publisher: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 mecashira_odom_publisher
+.PHONY : mecashira_odom_publisher
 
 # fast build rule for target.
-mecashira_kinematic_publisher/fast:
-	$(MAKE) -f CMakeFiles/mecashira_kinematic_publisher.dir/build.make CMakeFiles/mecashira_kinematic_publisher.dir/build
-.PHONY : mecashira_kinematic_publisher/fast
+mecashira_odom_publisher/fast:
+	$(MAKE) -f CMakeFiles/mecashira_odom_publisher.dir/build.make CMakeFiles/mecashira_odom_publisher.dir/build
+.PHONY : mecashira_odom_publisher/fast
 
 #=============================================================================
 # Target rules for targets named rosbuild_precompile
@@ -343,19 +343,19 @@ tests/fast:
 .PHONY : tests/fast
 
 # target to build an object file
-src/mecashira_kinematic_publisher.o:
-	$(MAKE) -f CMakeFiles/mecashira_kinematic_publisher.dir/build.make CMakeFiles/mecashira_kinematic_publisher.dir/src/mecashira_kinematic_publisher.o
-.PHONY : src/mecashira_kinematic_publisher.o
+src/mecashira_odom_publisher.o:
+	$(MAKE) -f CMakeFiles/mecashira_odom_publisher.dir/build.make CMakeFiles/mecashira_odom_publisher.dir/src/mecashira_odom_publisher.o
+.PHONY : src/mecashira_odom_publisher.o
 
 # target to preprocess a source file
-src/mecashira_kinematic_publisher.i:
-	$(MAKE) -f CMakeFiles/mecashira_kinematic_publisher.dir/build.make CMakeFiles/mecashira_kinematic_publisher.dir/src/mecashira_kinematic_publisher.i
-.PHONY : src/mecashira_kinematic_publisher.i
+src/mecashira_odom_publisher.i:
+	$(MAKE) -f CMakeFiles/mecashira_odom_publisher.dir/build.make CMakeFiles/mecashira_odom_publisher.dir/src/mecashira_odom_publisher.i
+.PHONY : src/mecashira_odom_publisher.i
 
 # target to generate assembly for a file
-src/mecashira_kinematic_publisher.s:
-	$(MAKE) -f CMakeFiles/mecashira_kinematic_publisher.dir/build.make CMakeFiles/mecashira_kinematic_publisher.dir/src/mecashira_kinematic_publisher.s
-.PHONY : src/mecashira_kinematic_publisher.s
+src/mecashira_odom_publisher.s:
+	$(MAKE) -f CMakeFiles/mecashira_odom_publisher.dir/build.make CMakeFiles/mecashira_odom_publisher.dir/src/mecashira_odom_publisher.s
+.PHONY : src/mecashira_odom_publisher.s
 
 # Help Target
 help:
@@ -372,7 +372,7 @@ help:
 	@echo "... ROSBUILD_gensrv_lisp"
 	@echo "... clean-test-results"
 	@echo "... edit_cache"
-	@echo "... mecashira_kinematic_publisher"
+	@echo "... mecashira_odom_publisher"
 	@echo "... rebuild_cache"
 	@echo "... rosbuild_precompile"
 	@echo "... rosbuild_premsgsrvgen"
@@ -384,9 +384,9 @@ help:
 	@echo "... test-results"
 	@echo "... test-results-run"
 	@echo "... tests"
-	@echo "... src/mecashira_kinematic_publisher.o"
-	@echo "... src/mecashira_kinematic_publisher.i"
-	@echo "... src/mecashira_kinematic_publisher.s"
+	@echo "... src/mecashira_odom_publisher.o"
+	@echo "... src/mecashira_odom_publisher.i"
+	@echo "... src/mecashira_odom_publisher.s"
 .PHONY : help
 
 

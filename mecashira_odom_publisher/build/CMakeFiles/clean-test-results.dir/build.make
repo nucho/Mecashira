@@ -32,15 +32,15 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher
+CMAKE_SOURCE_DIR = /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher/build
+CMAKE_BINARY_DIR = /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher/build
 
 # Utility rule file for clean-test-results.
 
 CMakeFiles/clean-test-results:
-	if ! rm -rf /home/javatea/.ros/test_results/mecashira_kinematic_publisher; then echo WARNING:\ failed\ to\ remove\ test-results\ directory ; fi
+	if ! rm -rf /home/javatea/.ros/test_results/mecashira_odom_publisher; then echo WARNING:\ failed\ to\ remove\ test-results\ directory ; fi
 
 clean-test-results: CMakeFiles/clean-test-results
 clean-test-results: CMakeFiles/clean-test-results.dir/build.make
@@ -55,6 +55,6 @@ CMakeFiles/clean-test-results.dir/clean:
 .PHONY : CMakeFiles/clean-test-results.dir/clean
 
 CMakeFiles/clean-test-results.dir/depend:
-	cd /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher/build /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher/build /home/javatea/ros_workspace/mecashira/mecashira_kinematic_publisher/build/CMakeFiles/clean-test-results.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher/build /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher/build /home/javatea/ros_workspace/mecashira/mecashira_odom_publisher/build/CMakeFiles/clean-test-results.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/clean-test-results.dir/depend
 

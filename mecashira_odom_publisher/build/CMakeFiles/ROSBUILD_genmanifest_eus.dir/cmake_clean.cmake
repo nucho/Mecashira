@@ -1,6 +1,6 @@
 FILE(REMOVE_RECURSE
   "CMakeFiles/ROSBUILD_genmanifest_eus"
-  "/home/javatea/.ros/roseus/mecashira_kinematic_publisher/manifest.l"
+  "/home/javatea/.ros/roseus/mecashira_odom_publisher/manifest.l"
 )
 
 # Per-language clean rules from dependency scanning.
