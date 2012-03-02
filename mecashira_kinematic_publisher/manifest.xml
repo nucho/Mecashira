@@ -1,0 +1,18 @@
+<package>
+  <description brief="mecanum_kinematic3">
+
+     mecanum_kinematic3
+
+  </description>
+  <author>javatea</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/mecanum_kinematic3</url>
+  <depend package="tf"/>
+  <depend package="joy"/>
+  <depend package="nav_msgs"/>
+  <depend package="std_msgs"/>
+
+</package>
+
+

@@ -1,0 +1,17 @@
+<package>
+  <description brief="joy_robot">
+
+     joy_robot
+
+  </description>
+  <author>javatea</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/joy_robot</url>
+  <depend package="std_msgs"/>
+  <depend package="roscpp"/>
+  <depend package="joy"/>
+
+</package>
+
+
