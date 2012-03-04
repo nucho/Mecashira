@@ -10,14 +10,24 @@
 #include "mecanum_kinematic.h"
 #include<math.h>
 
+#define ROBOT_LENGTH1   220.14
+#define ROBOT_LENGTH2   192.87
+#define WHEEL_RADIUS    76.175
+#define ENCORDER_COUNT  100
+
 class MecanumOdometryPublisher {
 public:
-	MecanumOdometryPublisher():mecanum_(220.14, 192.87, 76.175, 100){
+	MecanumOdometryPublisher():mecanum_(ROBOT_LENGTH1, ROBOT_LENGTH2, WHEEL_RADIUS, ENCORDER_COUNT){
+
 		encorder_sub_ = nh_.subscribe<std_msgs::Int32MultiArray> ("encorder",
 				50, &MecanumOdometryPublisher::encorderCb, this);
 		imu_sub_ = nh_.subscribe<std_msgs::Float32MultiArray> ("imu",
 				50, &MecanumOdometryPublisher::imuCb, this);
+		robot_goal_sub_ = nh_.subscribe<std_msgs::Float32MultiArray> ("robot_goal",
+				50, &MecanumOdometryPublisher::robot_goalCb, this);
+
 		odom_pub_ = nh_.advertise<nav_msgs::Odometry> ("odom", 50);
+		motor_goal_pub_ = nh_.advertise<std_msgs::Int32MultiArray> ("motor_goal", 50);
 
 		current_time_ = ros::Time::now();
 		last_time_ = ros::Time::now();
@@ -25,7 +35,6 @@ public:
 		x_=0;
 		y_=0;
 		th_=0;
-
 		for(int i=0;i<4;i++){
 			last_encorder_[i] = 0;
 		}
@@ -35,9 +44,10 @@ private:
 	Mecanum mecanum_;
 
 	ros::NodeHandle nh_;
-	ros::Subscriber encorder_sub_,imu_sub_;
-	
-    ros::Publisher odom_pub_;
+
+	ros::Subscriber encorder_sub_,imu_sub_,robot_goal_sub_;
+    ros::Publisher odom_pub_,motor_goal_pub_;
+
 	tf::TransformBroadcaster odom_broadcaster_;
 	ros::Time current_time_, last_time_;
 	
@@ -46,10 +56,19 @@ private:
 	int last_encorder_[4];
 	double vel_imu_th_;
 
-	void imuCb(const std_msgs::Float32MultiArray::ConstPtr& msg) {
-		imu_[0] = msg->data[0];
-		imu_[1] = msg->data[1];
-		imu_[2] = msg->data[2];
+	void robot_goalCb(const std_msgs::Float32MultiArray::ConstPtr& msg){
+		std_msgs::Int32MultiArray motorgoal_msg;
+		motorgoal_msg.data.clear();
+		
+		int motorgoal_count[4];
+		mecanum_.ik(msg->data[0],msg->data[1],msg->data[2], &motorgoal_count[0]);
+		ROS_INFO("%d %d %d %d",motorgoal_count[0],motorgoal_count[1],motorgoal_count[2],motorgoal_count[3]);
+		
+		for(int i=0; i<4; i++){
+			motorgoal_msg.data.push_back(motorgoal_count[i]+last_encorder_[i]);
+		}
+		
+		motor_goal_pub_.publish(motorgoal_msg);
 	}
 	
 	void encorderCb(const std_msgs::Int32MultiArray::ConstPtr& msg) {
@@ -57,10 +76,10 @@ private:
 		double dt = (current_time_ - last_time_).toSec();
         
         int vel_encorder[4];
-		vel_encorder[0] = last_encorder_[0] - msg->data[0];
-		vel_encorder[1] = last_encorder_[1] - msg->data[1];
-		vel_encorder[2] = last_encorder_[2] - msg->data[2];
-		vel_encorder[3] = last_encorder_[3] - msg->data[3];
+		for(int i=0; i<4; i++)
+		{
+			vel_encorder[i] = last_encorder_[i] - msg->data[i];
+		}
 
 		//compute odometry in a typical way given the velocities of the robot
         double vel[3];
@@ -112,12 +131,16 @@ private:
 		odom_pub_.publish(odom);
 
 		last_time_ = ros::Time::now();
-		last_encorder_[0] = msg->data[0];
-		last_encorder_[1] = msg->data[1];
-		last_encorder_[2] = msg->data[2];
-		last_encorder_[3] = msg->data[3];
+		for(int i=0; i<4; i++){
+			last_encorder_[i] = msg->data[i];
+		}
 	}
 
+	void imuCb(const std_msgs::Float32MultiArray::ConstPtr& msg) {
+		imu_[0] = msg->data[0];
+		imu_[1] = msg->data[1];
+		imu_[2] = msg->data[2];
+	}
 };
 
 int main(int argc, char** argv) {

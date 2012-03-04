@@ -23,15 +23,16 @@ public:
 		return odom;
 	}
 
-	int* ik(double x,double y,double th)
+	int* ik(double x,double y,double th,int* omega)
 	{
-		int* omega = (int*)malloc(sizeof(int)*4);
-
-		omega[0] = (x * 1000 + y * 1000 - (l1_+l2_) * th)/mm_per_count_;
-		omega[1] = (x * 1000 - y * 1000 + (l1_+l2_) * th)/mm_per_count_;
-		omega[2] = (x * 1000 - y * 1000 - (l1_+l2_) * th)/mm_per_count_;
-		omega[3] = (x * 1000 + y * 1000 + (l1_+l2_) * th)/mm_per_count_;
-
+		double Xmm = x * 1000;
+		double Ymm = y * 1000;
+		
+		omega[0] = (Xmm  + Ymm - (l1_+l2_) * th)/mm_per_count_;
+		omega[1] = (Xmm  - Ymm + (l1_+l2_) * th)/mm_per_count_;
+		omega[2] = (Xmm  - Ymm - (l1_+l2_) * th)/mm_per_count_;
+		omega[3] = (Xmm  + Ymm + (l1_+l2_) * th)/mm_per_count_;
+		
 		return omega;
 	}
 
