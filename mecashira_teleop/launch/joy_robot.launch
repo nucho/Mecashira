@@ -1,7 +1,0 @@
-<launch>
-
-	<node pkg="joy" type="joy_node" name="joystick"/>
-	<node pkg="joy_robot" type="joy_robot" name="joy_robot"/>
-
-</launch>
-

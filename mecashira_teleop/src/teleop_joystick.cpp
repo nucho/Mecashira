@@ -3,6 +3,7 @@
 #include <std_msgs/Int32MultiArray.h>
 #include <joy/Joy.h>
 
+//ファームウェアへの通信コマンド
 #define STOP    0x00
 #define FORWARD 0x01
 #define BACK    0x05
@@ -19,6 +20,21 @@ public:
 		vel_msg.data = 20;
 		ctrl_pub_ = nh_.advertise<std_msgs::UInt8> ("joy_ctrl", 1);
 		joy_sub_ = nh_.subscribe<joy::Joy> ("joy", 10,&TeleopRobot::joyCallback, this);
+		
+		//parameter
+		ros::NodeHandle n_param ("~");
+    	if (!n_param.getParam("speed_up_button", speed_up_button_)){
+			speed_up_button_ = 3;
+		}
+    	if (!n_param.getParam("speed_down_button", speed_down_button_)){
+			speed_down_button_ = 1;
+		}
+    	if (!n_param.getParam("rotate_left_button", rotate_left_button_)){
+			rotate_left_button_ = 6;
+		}
+    	if (!n_param.getParam("rotate_right_button", rotate_right_button_)){
+			rotate_right_button_ = 7;
+		}
 	}
 
 private:
@@ -29,19 +45,23 @@ private:
 	ros::Subscriber joy_sub_;
 	std_msgs::UInt8 ctrl_msg;
 
+	int speed_up_button_,speed_down_button_,rotate_left_button_,rotate_right_button_;
+	
+
 	void joyCallback(const joy::Joy::ConstPtr& joy) {
 		ROS_INFO("joystick input");
 
-		if (joy->buttons[0] == 1 && joy->buttons[2] == 0 && vel_msg.data < 32)
+		if (joy->buttons[speed_up_button_ ] == 1 && joy->buttons[speed_down_button_] == 0 && vel_msg.data < 28)
 		{
-			vel_msg.data += 4;
+			vel_msg.data += 2;
 			vel_pub_.publish(vel_msg);
 		}
-		else if (joy->buttons[0] == 0 && joy->buttons[2] == 1 && vel_msg.data > 0)
+		else if (joy->buttons[speed_up_button_ ] == 0 && joy->buttons[speed_down_button_] == 1 && vel_msg.data > 0)
 		{
-			vel_msg.data -= 4;
+			vel_msg.data -= 2;
 			vel_pub_.publish(vel_msg);
 		}
+
 
 		ctrl_msg.data = STOP;
 		//back
@@ -60,10 +80,10 @@ private:
 
 		if(!ctrl_msg.data){
 			//l1 rotate left
-			if( joy->buttons[6] == 1&& joy->buttons[7] == 0){
+			if( joy->buttons[rotate_left_button_] == 1&& joy->buttons[rotate_right_button_] == 0){
 				ctrl_msg.data = ROTATE_LEFT;
 			}//r1 rotate right
-			else if(joy->buttons[6] == 0 && joy->buttons[7] == 1){
+			else if(joy->buttons[rotate_left_button_] == 0 && joy->buttons[rotate_right_button_] == 1){
 				ctrl_msg.data = ROTATE_RIGHT;
 			}
 		}
@@ -72,7 +92,7 @@ private:
 };
 
 int main(int argc, char** argv) {
-	ros::init(argc, argv, "teleop_robot");
+	ros::init(argc, argv, "teleop_mecashira");
 	TeleopRobot teleop_motor;
 
 	ros::spin();
