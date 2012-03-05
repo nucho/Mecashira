@@ -18,13 +18,12 @@
 class MecanumOdometryPublisher {
 public:
 	MecanumOdometryPublisher():mecanum_(ROBOT_LENGTH1, ROBOT_LENGTH2, WHEEL_RADIUS, ENCORDER_COUNT){
-
 		encorder_sub_ = nh_.subscribe<std_msgs::Int32MultiArray> ("encorder",
-				50, &MecanumOdometryPublisher::encorderCb, this);
+			50, &MecanumOdometryPublisher::encorderCb, this);
 		imu_sub_ = nh_.subscribe<std_msgs::Float32MultiArray> ("imu",
-				50, &MecanumOdometryPublisher::imuCb, this);
+			50, &MecanumOdometryPublisher::imuCb, this);
 		robot_goal_sub_ = nh_.subscribe<std_msgs::Float32MultiArray> ("robot_goal",
-				50, &MecanumOdometryPublisher::robot_goalCb, this);
+        	50, &MecanumOdometryPublisher::robot_goalCb, this);
 
 		odom_pub_ = nh_.advertise<nav_msgs::Odometry> ("odom", 50);
 		motor_goal_pub_ = nh_.advertise<std_msgs::Int32MultiArray> ("motor_goal", 50);
@@ -33,10 +32,15 @@ public:
 		last_time_ = ros::Time::now();
 
 		x_=0;
-		y_=0;
-		th_=0;
+	    y_=0;
+	    th_=0;
 		for(int i=0;i<4;i++){
-			last_encorder_[i] = 0;
+    	    last_encorder_[i] = 0;
+    	}
+    	
+    	ros::NodeHandle n_param ("~");
+    	if (!n_param.getParam("odom_angular_scale_correction", odom_angular_scale_correction_)){
+			odom_angular_scale_correction_ = 1.0;
 		}
 	}
 
@@ -56,16 +60,18 @@ private:
 	int last_encorder_[4];
 	double vel_imu_th_;
 
+	double odom_angular_scale_correction_;
+
 	void robot_goalCb(const std_msgs::Float32MultiArray::ConstPtr& msg){
 		std_msgs::Int32MultiArray motorgoal_msg;
 		motorgoal_msg.data.clear();
 		
 		int motorgoal_count[4];
 		mecanum_.ik(msg->data[0],msg->data[1],msg->data[2], &motorgoal_count[0]);
-		ROS_INFO("%d %d %d %d",motorgoal_count[0],motorgoal_count[1],motorgoal_count[2],motorgoal_count[3]);
+		//ROS_INFO("%d %d %d %d",motorgoal_count[0],motorgoal_count[1],motorgoal_count[2],motorgoal_count[3]);
 		
 		for(int i=0; i<4; i++){
-			motorgoal_msg.data.push_back(motorgoal_count[i]+last_encorder_[i]);
+			motorgoal_msg.data.push_back(motorgoal_count[i] / odom_angular_scale_correction_ + last_encorder_[i]);
 		}
 		
 		motor_goal_pub_.publish(motorgoal_msg);
@@ -76,8 +82,7 @@ private:
 		double dt = (current_time_ - last_time_).toSec();
         
         int vel_encorder[4];
-		for(int i=0; i<4; i++)
-		{
+		for(int i=0; i<4; i++){
 			vel_encorder[i] = last_encorder_[i] - msg->data[i];
 		}
 
@@ -85,10 +90,10 @@ private:
         double vel[3];
 		mecanum_.k(&vel_encorder[0],&vel[0]);
 		
-		//rvizの座標系に合わせて回転
+		//rvizの座標系に合わせて回転したり
    		double delta_x = -(vel[0] * cos(-th_) - vel[1] * sin(-th_));
 		double delta_y = (vel[0] * sin(-th_) + vel[1] * cos(-th_));
-		double delta_th = -vel[2];
+		double delta_th = -vel[2] * odom_angular_scale_correction_;
     	x_ += delta_x;
     	y_ += delta_y;
 		th_ += delta_th;
@@ -144,7 +149,7 @@ private:
 };
 
 int main(int argc, char** argv) {
-	ros::init(argc, argv, "mecanum_odomery_publisher");
+	ros::init(argc, argv, "mecashira_odomery_publisher");
 	MecanumOdometryPublisher mecanum_odometry_publisher;
 
 	ros::spin();
