@@ -3,7 +3,6 @@
 	<node respawn="true" pkg="joy" type="joy" name="mecashira_joy" >
 		<param name="dev" type="string" value="/dev/input/js0" />
 		<param name="deadzone" value="0.32" />
-		<param name="autorepeat_rate" value="3.0" />
 	</node>
 
 	<node pkg="mecashira_teleop" type="teleop_joystick" name="mecashira_teleop_joy">
