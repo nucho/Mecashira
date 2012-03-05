@@ -5,7 +5,7 @@
 #include <nav_msgs/Odometry.h>
 #include <std_msgs/Int32MultiArray.h>
 #include <std_msgs/Float32MultiArray.h>
-
+#include <std_msgs/Empty.h>
 
 #include "mecanum_kinematic.h"
 #include<math.h>
@@ -24,6 +24,8 @@ public:
 			50, &MecanumOdometryPublisher::imuCb, this);
 		robot_goal_sub_ = nh_.subscribe<std_msgs::Float32MultiArray> ("robot_goal",
         	50, &MecanumOdometryPublisher::robot_goalCb, this);
+		sensor_reset_sub_ = nh_.subscribe<std_msgs::Empty> ("sensor_reset_sub",
+        	10, &MecanumOdometryPublisher::sensor_resetCb, this);
 
 		odom_pub_ = nh_.advertise<nav_msgs::Odometry> ("odom", 50);
 		motor_goal_pub_ = nh_.advertise<std_msgs::Int32MultiArray> ("motor_goal", 50);
@@ -49,7 +51,7 @@ private:
 
 	ros::NodeHandle nh_;
 
-	ros::Subscriber encorder_sub_,imu_sub_,robot_goal_sub_;
+	ros::Subscriber encorder_sub_,imu_sub_,robot_goal_sub_,sensor_reset_sub_;
     ros::Publisher odom_pub_,motor_goal_pub_;
 
 	tf::TransformBroadcaster odom_broadcaster_;
@@ -61,6 +63,12 @@ private:
 	double vel_imu_th_;
 
 	double odom_angular_scale_correction_;
+
+	void sensor_resetCb(const std_msgs::Empty::ConstPtr& msg){
+		for(int i=0;i<4;i++){
+    	    last_encorder_[i] = 0;
+    	}
+	}
 
 	void robot_goalCb(const std_msgs::Float32MultiArray::ConstPtr& msg){
 		std_msgs::Int32MultiArray motorgoal_msg;
