@@ -1,0 +1,16 @@
+<launch>
+
+	<node pkg="tf" type="static_transform_publisher" name="baselink_to_laser"
+     args="0.12 0.0 0.0 0 0 0 base_link laser 10" />
+
+	<node name="serial_node" pkg="rosserial_python" type="serial_node.py" respawn="false" output="log">
+		<param name="baud" type="int" value="115200" />
+		<param name="port" type="string" value="/dev/ttyACM0"/>
+	</node>
+
+	<node name="mecashira_node" pkg="mecashira_odom_publisher" type="mecashira_odom_publisher" respawn="false" output="log">
+		<param name="odom_angular_scale_correction" type="double" value="0.8" />
+	</node>
+
+</launch>
+
