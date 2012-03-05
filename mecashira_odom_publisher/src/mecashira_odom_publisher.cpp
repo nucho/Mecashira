@@ -65,9 +65,12 @@ private:
 	double odom_angular_scale_correction_;
 
 	void sensor_resetCb(const std_msgs::Empty::ConstPtr& msg){
+		x_=0;
+		y_=0;
+		th_=0;
 		for(int i=0;i<4;i++){
-    	    last_encorder_[i] = 0;
-    	}
+			last_encorder_[i] = 0;
+		}
 	}
 
 	void robot_goalCb(const std_msgs::Float32MultiArray::ConstPtr& msg){
@@ -75,7 +78,7 @@ private:
 		motorgoal_msg.data.clear();
 		
 		int motorgoal_count[4];
-		mecanum_.ik(msg->data[0],msg->data[1],msg->data[2], &motorgoal_count[0]);
+		mecanum_.ik(msg->data[0],-msg->data[1],msg->data[2], &motorgoal_count[0]);
 		//ROS_INFO("%d %d %d %d",motorgoal_count[0],motorgoal_count[1],motorgoal_count[2],motorgoal_count[3]);
 		
 		for(int i=0; i<4; i++){
@@ -91,7 +94,7 @@ private:
         
         int vel_encorder[4];
 		for(int i=0; i<4; i++){
-			vel_encorder[i] = last_encorder_[i] - msg->data[i];
+			vel_encorder[i] = msg->data[i] - last_encorder_[i];
 		}
 
 		//compute odometry in a typical way given the velocities of the robot
@@ -99,9 +102,9 @@ private:
 		mecanum_.k(&vel_encorder[0],&vel[0]);
 		
 		//rvizの座標系に合わせて回転したり
-   		double delta_x = -(vel[0] * cos(-th_) - vel[1] * sin(-th_));
-		double delta_y = (vel[0] * sin(-th_) + vel[1] * cos(-th_));
-		double delta_th = -vel[2] * odom_angular_scale_correction_;
+   		double delta_x = (vel[0] * cos(-th_) - vel[1] * sin(-th_));
+		double delta_y = -(vel[0] * sin(-th_) + vel[1] * cos(-th_));
+		double delta_th = vel[2] * odom_angular_scale_correction_;
     	x_ += delta_x;
     	y_ += delta_y;
 		th_ += delta_th;
