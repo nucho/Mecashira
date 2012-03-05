@@ -24,7 +24,7 @@ public:
 			50, &MecanumOdometryPublisher::imuCb, this);
 		robot_goal_sub_ = nh_.subscribe<std_msgs::Float32MultiArray> ("robot_goal",
         	50, &MecanumOdometryPublisher::robot_goalCb, this);
-		sensor_reset_sub_ = nh_.subscribe<std_msgs::Empty> ("sensor_reset_sub",
+		sensor_reset_sub_ = nh_.subscribe<std_msgs::Empty> ("sensor_reset",
         	10, &MecanumOdometryPublisher::sensor_resetCb, this);
 
 		odom_pub_ = nh_.advertise<nav_msgs::Odometry> ("odom", 50);
@@ -65,12 +65,12 @@ private:
 	double odom_angular_scale_correction_;
 
 	void sensor_resetCb(const std_msgs::Empty::ConstPtr& msg){
-		x_=0;
-		y_=0;
-		th_=0;
 		for(int i=0;i<4;i++){
-			last_encorder_[i] = 0;
-		}
+    	    last_encorder_[i] = 0;
+    	}
+    	x_=0;
+	    y_=0;
+	    th_=0;
 	}
 
 	void robot_goalCb(const std_msgs::Float32MultiArray::ConstPtr& msg){
@@ -78,11 +78,11 @@ private:
 		motorgoal_msg.data.clear();
 		
 		int motorgoal_count[4];
-		mecanum_.ik(msg->data[0],-msg->data[1],msg->data[2], &motorgoal_count[0]);
+		mecanum_.ik(msg->data[0],-msg->data[1],msg->data[2]/odom_angular_scale_correction_, &motorgoal_count[0]);
 		//ROS_INFO("%d %d %d %d",motorgoal_count[0],motorgoal_count[1],motorgoal_count[2],motorgoal_count[3]);
 		
 		for(int i=0; i<4; i++){
-			motorgoal_msg.data.push_back(motorgoal_count[i] / odom_angular_scale_correction_ + last_encorder_[i]);
+			motorgoal_msg.data.push_back(motorgoal_count[i]  + last_encorder_[i]);
 		}
 		
 		motor_goal_pub_.publish(motorgoal_msg);
@@ -94,7 +94,7 @@ private:
         
         int vel_encorder[4];
 		for(int i=0; i<4; i++){
-			vel_encorder[i] = msg->data[i] - last_encorder_[i];
+			vel_encorder[i] =  msg->data[i] - last_encorder_[i];
 		}
 
 		//compute odometry in a typical way given the velocities of the robot
@@ -102,8 +102,8 @@ private:
 		mecanum_.k(&vel_encorder[0],&vel[0]);
 		
 		//rvizの座標系に合わせて回転したり
-   		double delta_x = (vel[0] * cos(th_) - vel[1] * sin(th_));
-		double delta_y = -(vel[0] * sin(th_) + vel[1] * cos(th_));
+   		double delta_x = (vel[0] * cos(-th_) - vel[1] * sin(-th_));
+		double delta_y = -(vel[0] * sin(-th_) + vel[1] * cos(-th_));
 		double delta_th = vel[2] * odom_angular_scale_correction_;
     	x_ += delta_x;
     	y_ += delta_y;
