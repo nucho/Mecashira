@@ -102,8 +102,8 @@ private:
 		mecanum_.k(&vel_encorder[0],&vel[0]);
 		
 		//rvizの座標系に合わせて回転したり
-   		double delta_x = (vel[0] * cos(-th_) - vel[1] * sin(-th_));
-		double delta_y = -(vel[0] * sin(-th_) + vel[1] * cos(-th_));
+   		double delta_x = (vel[0] * cos(th_) - vel[1] * sin(th_));
+		double delta_y = -(vel[0] * sin(th_) + vel[1] * cos(th_));
 		double delta_th = vel[2] * odom_angular_scale_correction_;
     	x_ += delta_x;
     	y_ += delta_y;
