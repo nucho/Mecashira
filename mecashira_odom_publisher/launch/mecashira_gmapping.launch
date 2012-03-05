@@ -1,5 +1,4 @@
 <launch>
-<!--
 	<node name="hokuyo" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">
 		<param name="calibrate_time" type="bool" value="false"/>     
 		<param name="port" type="string" value="/dev/ttyACM1"/> 
@@ -27,15 +26,12 @@
 		<param name="temporalUpdate" value="-1.0"/>
 		<param name="resampleThreshold" value="0.5"/>
 		<param name="particles" value="80"/>
--->
-<!--
 		<param name="xmin" value="-50.0"/>
 		<param name="ymin" value="-50.0"/>
 		<param name="xmax" value="50.0"/>
 		<param name="ymax" value="50.0"/>
 make the starting size small for the benefit of the Android client's memory...
 -->
-<!--
 		<param name="xmin" value="-1.0"/>
 		<param name="ymin" value="-1.0"/>
 		<param name="xmax" value="1.0"/>
@@ -47,7 +43,7 @@ make the starting size small for the benefit of the Android client's memory...
 		<param name="lasamplerange" value="0.005"/>
 		<param name="lasamplestep" value="0.005"/>
 	</node>
--->
+
 	<node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(find mecashira_odom_publisher)/launch/mecashira_gmapping_rviz.vcg">
 	</node>
 
