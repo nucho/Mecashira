@@ -1,5 +1,4 @@
 #include <ros/ros.h>
-#include <joy/Joy.h>
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_listener.h>
 #include <nav_msgs/Odometry.h>
@@ -23,9 +22,9 @@ public:
 		imu_sub_ = nh_.subscribe<std_msgs::Float32MultiArray> ("imu",
 			50, &MecanumOdometryPublisher::imuCb, this);
 		robot_goal_sub_ = nh_.subscribe<std_msgs::Float32MultiArray> ("robot_goal",
-        	50, &MecanumOdometryPublisher::robot_goalCb, this);
+			50, &MecanumOdometryPublisher::robot_goalCb, this);
 		sensor_reset_sub_ = nh_.subscribe<std_msgs::Empty> ("sensor_reset",
-        	10, &MecanumOdometryPublisher::sensor_resetCb, this);
+			10, &MecanumOdometryPublisher::sensor_resetCb, this);
 
 		odom_pub_ = nh_.advertise<nav_msgs::Odometry> ("odom", 50);
 		motor_goal_pub_ = nh_.advertise<std_msgs::Int32MultiArray> ("motor_goal", 50);
@@ -34,14 +33,14 @@ public:
 		last_time_ = ros::Time::now();
 
 		x_=0;
-	    y_=0;
-	    th_=0;
+		y_=0;
+		th_=0;
 		for(int i=0;i<4;i++){
-    	    last_encorder_[i] = 0;
-    	}
+			last_encorder_[i] = 0;
+		}
     	
-    	ros::NodeHandle n_param ("~");
-    	if (!n_param.getParam("odom_angular_scale_correction", odom_angular_scale_correction_)){
+		ros::NodeHandle n_param ("~");
+		if (!n_param.getParam("odom_angular_scale_correction", odom_angular_scale_correction_)){
 			odom_angular_scale_correction_ = 1.0;
 		}
 	}
@@ -52,7 +51,7 @@ private:
 	ros::NodeHandle nh_;
 
 	ros::Subscriber encorder_sub_,imu_sub_,robot_goal_sub_,sensor_reset_sub_;
-    ros::Publisher odom_pub_,motor_goal_pub_;
+	ros::Publisher odom_pub_,motor_goal_pub_;
 
 	tf::TransformBroadcaster odom_broadcaster_;
 	ros::Time current_time_, last_time_;
@@ -98,50 +97,50 @@ private:
 		}
 
 		//compute odometry in a typical way given the velocities of the robot
-        double vel[3];
+		double vel[3];
 		mecanum_.k(&vel_encorder[0],&vel[0]);
 		
 		//rvizの座標系に合わせて回転したり
-   		double delta_x = (vel[0] * cos(-th_) - vel[1] * sin(-th_));
+		double delta_x = (vel[0] * cos(-th_) - vel[1] * sin(-th_));
 		double delta_y = -(vel[0] * sin(-th_) + vel[1] * cos(-th_));
 		double delta_th = vel[2] * odom_angular_scale_correction_;
-    	x_ += delta_x;
-    	y_ += delta_y;
+		x_ += delta_x;
+		y_ += delta_y;
 		th_ += delta_th;
 		
-    	//since all odometry is 6DOF we'll need a quaternion created from yaw
-    	geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(th_);
+		//since all odometry is 6DOF we'll need a quaternion created from yaw
+		geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(th_);
 		//ROS_INFO("x:%f\ty:%f\tth:%f",x_,y_,th_*180/M_PI);
 
-   		//first, we'll publish the transform over tf
-    	geometry_msgs::TransformStamped odom_trans;
-    	odom_trans.header.stamp = current_time_;
-    	odom_trans.header.frame_id = "odom";
-    	odom_trans.child_frame_id = "base_link";
-    	odom_trans.transform.translation.x = x_;
-    	odom_trans.transform.translation.y = y_;
-    	odom_trans.transform.translation.z = 0.0;
-    	odom_trans.transform.rotation = odom_quat;
+		//first, we'll publish the transform over tf
+ 		geometry_msgs::TransformStamped odom_trans;
+		odom_trans.header.stamp = current_time_;
+		odom_trans.header.frame_id = "odom";
+		odom_trans.child_frame_id = "base_link";
+		odom_trans.transform.translation.x = x_;
+		odom_trans.transform.translation.y = y_;
+		odom_trans.transform.translation.z = 0.0;
+		odom_trans.transform.rotation = odom_quat;
 
-  	  	//send the transform
-    	odom_broadcaster_.sendTransform(odom_trans);
+ 		//send the transform
+ 		odom_broadcaster_.sendTransform(odom_trans);
 
-    	//next, we'll publish the odometry message over ROS
-    	nav_msgs::Odometry odom;
-    	odom.header.stamp = current_time_;
-    	odom.header.frame_id = "odom";
+		//next, we'll publish the odometry message over ROS
+		nav_msgs::Odometry odom;
+		odom.header.stamp = current_time_;
+		odom.header.frame_id = "odom";
     	
-    	//set the position
-    	odom.pose.pose.position.x = x_;
-    	odom.pose.pose.position.y = y_;
-    	odom.pose.pose.position.z = 0.0;
-    	odom.pose.pose.orientation = odom_quat;
+		//set the position
+ 		odom.pose.pose.position.x = x_;
+		odom.pose.pose.position.y = y_;
+ 		odom.pose.pose.position.z = 0.0;
+		odom.pose.pose.orientation = odom_quat;
 		
 		//set the velocity
-    	odom.child_frame_id = "base_link";
-    	odom.twist.twist.linear.x = delta_x/dt;
-    	odom.twist.twist.linear.y = delta_y/dt;
-   	 	odom.twist.twist.angular.z = delta_th/dt;
+		odom.child_frame_id = "base_link";
+ 		odom.twist.twist.linear.x = delta_x/dt;
+		odom.twist.twist.linear.y = delta_y/dt;
+		odom.twist.twist.angular.z = delta_th/dt;
 
 		//publish the message
 		odom_pub_.publish(odom);
