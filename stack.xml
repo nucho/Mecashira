@@ -1,0 +1,16 @@
+<stack>
+  <description brief="Mecashira">
+    <p>
+    Mecashiraを使うための何か.
+    </p>
+  </description>
+  <author>Atsushi Egashira</author>
+  <license>LGPL v3</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/rosserial</url>
+  <depend stack="common_msgs" /> <!-- nav_msgs, sensor_msgs, geometry_msgs, diagnostic_msgs -->
+  <depend stack="ros" />
+  <depend stack="ros_comm" /> <!-- std_msgs, rospy -->
+  <depend stack="rosserial" />
+  <depend stack="ar_pose" /> 
+</stack>
